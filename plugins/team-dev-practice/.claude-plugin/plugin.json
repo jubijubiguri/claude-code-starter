@@ -1,5 +1,4 @@
 {
   "name": "team-dev-practice",
-  "version": "1.0.0",
   "description": "개발 실천 가드: TDD 가드, 커밋 전 검증, 품질 게이트, 무한 재시도 차단. 팀/개인 옵트인."
 }

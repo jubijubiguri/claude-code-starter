@@ -120,7 +120,7 @@ HTML을 연 뒤 Korean 으로 최상위 수치와 가장 큰 개선 3가지를 2
 - **모든 세션이 빈 usage**: 아주 오래된 CLI 버전일 수 있음. 스크립트가 자동으로 걸러내고 남은 게 없으면 종료.
 - **가격 미등록 모델**: 기본값으로 Opus 가격 적용하고, 콘솔에 `[warn] unknown model: <id>, applying Opus default` 출력.
 - **Python 3.9+**: dataclass / walrus 사용 없음, 순수 stdlib 만 필요. pip install 불필요.
-- **Chart.js CDN 의존**: 오프라인 환경이면 `--inline-chartjs` 옵션으로 로컬 복사본 사용 가능 (스크립트가 지원).
+- **Chart.js CDN 의존**: 차트는 인터넷 연결이 있어야 표시된다. 오프라인/차단 환경에서는 차트가 표시되지 않을 수 있음을 사용자에게 안내할 것.
 
 ## 품질 기준 (skill 자체에 대한)
 

@@ -18,12 +18,15 @@ function main() {
   const filePath = (data.tool_input || {}).file_path;
   if (typeof filePath !== 'string' || !filePath) process.exit(0);
 
-  // Windows 경로(백슬래시)에서도 동일하게 매칭되도록 정규화한다.
+  // Windows 경로(백슬래시)에서도 동일하게 매칭되도록 정규화한 뒤,
+  // 문자열 포함이 아니라 경로 세그먼트 단위로 검사한다 (상대경로 .env, ./.env 등 커버).
   const normalized = filePath.replace(/\\/g, '/');
+  const segments = normalized.toLowerCase().split('/').filter(Boolean);
+  const basename = segments.length ? segments[segments.length - 1] : '';
 
   // 전역 CLAUDE.md(공통 표준)는 Claude가 수정할 수 없다.
   // 프로젝트의 CLAUDE.md(레포 루트)는 여기 걸리지 않는다 — .claude 폴더 안의 CLAUDE.md만 해당.
-  if (normalized.toLowerCase().endsWith('/.claude/claude.md')) {
+  if (segments.length >= 2 && segments[segments.length - 2] === '.claude' && basename === 'claude.md') {
     console.error('');
     console.error('🛑 Protected Files Guard');
     console.error('전역 CLAUDE.md(~/.claude/CLAUDE.md)는 공통 표준이라 Claude가 수정할 수 없습니다.');
@@ -32,24 +35,26 @@ function main() {
     process.exit(2);
   }
 
-  const protectedPatterns = [
-    '/.env',
-    '.env.',
-    '/.git/',
-    'credentials.',
-    'secret.',
-    'secrets.'
-  ];
+  let matchedRule = null;
+  if (basename === '.env' || basename.startsWith('.env.')) {
+    matchedRule = '.env 계열 파일';
+  } else if (segments.includes('.git')) {
+    matchedRule = '.git 내부';
+  } else if (
+    basename.startsWith('credentials.') ||
+    basename.startsWith('secret.') ||
+    basename.startsWith('secrets.')
+  ) {
+    matchedRule = '자격증명/시크릿 파일';
+  }
 
-  for (const pattern of protectedPatterns) {
-    if (normalized.includes(pattern)) {
-      console.error('');
-      console.error('🛑 Protected Files Guard');
-      console.error('보호된 파일 수정이 차단되었습니다.');
-      console.error(`파일: ${filePath}`);
-      console.error(`보호 규칙: ${pattern}`);
-      process.exit(2);
-    }
+  if (matchedRule) {
+    console.error('');
+    console.error('🛑 Protected Files Guard');
+    console.error('보호된 파일 수정이 차단되었습니다.');
+    console.error(`파일: ${filePath}`);
+    console.error(`보호 규칙: ${matchedRule}`);
+    process.exit(2);
   }
 
   process.exit(0);

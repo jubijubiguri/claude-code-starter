@@ -120,14 +120,29 @@ Claude Code가 이 GitHub 저장소에서 직접 받아갑니다 (공개 저장�
 - pre-commit-check / quality-gate는 프로젝트에 npm scripts(lint/build/test) 또는
   ruff/pytest가 있을 때만 해당 검증을 실행합니다. 없으면 통과합니다.
 
-## 검증
+## 검증 (테스트)
 
-모든 hook은 exit code 단위 테스트(70건)를 통과했습니다.
+테스트가 저장소에 포함되어 있습니다. Node.js만 있으면 실행됩니다.
+
+```bash
+node tests/run-tests.js
+```
+
+hook 차단/허용(위험 명령·git 전역 옵션 우회·보호 파일의 Windows/POSIX/상대경로·
+전역 CLAUDE.md 보호·TDD Guard·Circuit Breaker 등)과 마켓플레이스 구조를 검증하며,
+Python이 있으면 AI-Readiness 경로 추출 테스트까지 실행합니다.
+
 수동 확인: 아무 프로젝트에서 Claude Code로 `git push --force`를 요청하면
 "Dangerous Command Guard" 차단 메시지가 떠야 합니다.
 
 ## 변경 이력
 
+- 2026-08-31 — 실사용 피드백 반영 2차.
+  배포 정책 변경: 매니페스트의 고정 version 제거 — 커밋이 갱신되면 플러그인도 따라 업데이트됩니다.
+  setup.ps1에 Claude Code 최소 버전(2.1.139) 검사 추가.
+  보호 파일 검사를 경로 세그먼트 방식으로 개선(상대경로 `.env`, Windows 경로 등 전부 커버).
+  AI-Readiness 경로 추출 수정(점 시작 경로 허용, .js/.json 오매칭 방지, ~·./ 정규화).
+  테스트를 저장소에 포함(`tests/`, 90건). 토큰 분석 문서의 미구현 옵션 안내 제거.
 - team-guards 1.1.1 — git 전역 옵션 우회 차단: `git -C <경로> reset --hard`, `git --git-dir=... push --force` 등
   서브커맨드 앞에 전역 옵션(-C/-c, --git-dir, --work-tree, --no-pager)이 오면 규칙을 비켜가던 문제 수정.
   git 위험 명령 패턴 5종 전부 갱신 (실사용 피드백 반영).

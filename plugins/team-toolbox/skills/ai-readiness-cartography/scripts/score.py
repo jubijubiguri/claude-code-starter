@@ -40,7 +40,9 @@ PRIMARY_CONTEXT = ("CLAUDE.md", "AGENTS.md")  # anything stronger than README
 # Heuristic regex
 RE_PATH_REF = re.compile(
     r"(?<![A-Za-z0-9_/])"
-    r"((?:\./|[A-Za-z0-9_]+/)[A-Za-z0-9_./-]+\.(?:py|ts|tsx|js|jsx|md|sql|json|yaml|yml|toml|html|css|sh|go|rs|java|kt|rb|php))"
+    r"((?:\./|~/|[A-Za-z0-9_.-]+/)[A-Za-z0-9_./-]+"
+    r"\.(?:py|ts|tsx|js|jsx|md|sql|json|yaml|yml|toml|html|css|sh|go|rs|java|kt|rb|php)"
+    r"(?![A-Za-z0-9]))"  # 확장자 경계 — .js가 .json 앞부분에 매칭되는 것 방지
 )
 RE_BASH_FENCE = re.compile(r"```(?:bash|sh|shell|zsh|console)\s*\n([\s\S]*?)```", re.IGNORECASE)
 RE_NON_OBVIOUS = re.compile(r"\b(Why:|Note:|Gotcha|Warning|Don't|Caveat|Important:|반드시|주의)", re.IGNORECASE)
@@ -441,8 +443,12 @@ def score_e(repo: Path, context_files: list[Path]) -> CategoryScore:
         text = read_text(p)
         for ref in set(RE_PATH_REF.findall(text)):
             total_refs += 1
-            # try repo-relative and context-file-relative
-            candidates = [repo / ref, p.parent / ref]
+            # ~ / ./ 를 정규화한 뒤 repo-relative, context-file-relative 순으로 확인
+            if ref.startswith("~/"):
+                candidates = [Path(ref).expanduser()]
+            else:
+                norm = ref[2:] if ref.startswith("./") else ref
+                candidates = [repo / norm, p.parent / norm]
             if not any(c.exists() for c in candidates):
                 bad_refs.append((p, ref))
     if total_refs == 0:

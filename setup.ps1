@@ -52,7 +52,19 @@ Write-Step "1/4 필요한 프로그램 확인"
 # -----------------------------------------------------------------------------
 
 if (Get-Command claude -ErrorAction SilentlyContinue) {
-    Write-Ok "Claude Code 설치됨"
+    $versionText = claude --version 2>$null
+    $m = [regex]::Match("$versionText", '\d+\.\d+\.\d+')
+    if ($m.Success) {
+        $version = [version]$m.Value
+        if ($version -lt [version]'2.1.139') {
+            Write-Warn2 "Claude Code 2.1.139 이상이 필요합니다. 현재: $version"
+            Write-Warn2 "claude update 를 실행한 뒤 셋업을 다시 진행해주세요."
+            exit 1
+        }
+        Write-Ok "Claude Code 설치됨 (v$version)"
+    } else {
+        Write-Ok "Claude Code 설치됨 (버전 확인 불가 — 계속 진행)"
+    }
 } else {
     Write-Warn2 "Claude Code를 찾을 수 없습니다. 설치 후 다시 실행해주세요."
     Write-Warn2 "설치 안내: https://code.claude.com/docs"
