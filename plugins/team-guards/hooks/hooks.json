@@ -1,0 +1,29 @@
+{
+  "description": "안전 가드: 위험 명령 차단, 보호 파일 수정 차단",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/dangerous-cmd-guard.js"],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/protected-files.js"],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

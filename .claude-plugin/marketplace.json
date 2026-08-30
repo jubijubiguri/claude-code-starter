@@ -1,0 +1,26 @@
+{
+  "name": "company-tools",
+  "owner": {
+    "name": "AI_Design_Lab"
+  },
+  "plugins": [
+    {
+      "name": "team-guards",
+      "source": "./plugins/team-guards",
+      "description": "안전 가드 (기본 켜짐): 위험 명령 차단, 보호 파일·전역 CLAUDE.md 수정 차단",
+      "version": "1.1.0"
+    },
+    {
+      "name": "team-dev-practice",
+      "source": "./plugins/team-dev-practice",
+      "description": "개발 실천 가드 (옵트인): TDD 가드, 커밋 전 검증, 품질 게이트, 무한 재시도 차단",
+      "version": "1.0.0"
+    },
+    {
+      "name": "team-toolbox",
+      "source": "./plugins/team-toolbox",
+      "description": "진단·유틸 스킬 모음 (기본 켜짐): AI-readiness 감사, SDD 스캐폴드, 토큰 효율 분석 등 호출형 도구",
+      "version": "1.2.0"
+    }
+  ]
+}

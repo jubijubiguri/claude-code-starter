@@ -1,0 +1,5 @@
+{
+  "name": "team-toolbox",
+  "version": "1.2.0",
+  "description": "진단·유틸 스킬 모음: AI-readiness 감사, SDD 스캐폴드, 토큰 효율 분석. 호출할 때만 동작하며 평소 비용이 없음. 전 구성원 기본 적용."
+}
