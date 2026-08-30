@@ -42,24 +42,26 @@ function main() {
       /\brm\s+(?=[^;\n]*(?:-[A-Za-z]*r[A-Za-z]*f[A-Za-z]*|-[A-Za-z]*f[A-Za-z]*r[A-Za-z]*|--recursive[^;\n]*--force|--force[^;\n]*--recursive))[^;\n]*\s(?:--\s+)?(?:\/[^ \t;\n]*|~(?:\/[^ \t;\n]*)?|\$HOME(?:\/[^ \t;\n]*)?|\$\{HOME\}(?:\/[^ \t;\n]*)?|\.{1,2}|\*|\.git(?:\/[^ \t;\n]*)?)(?:\s|$|[;&|])/i,
       '광범위한 rm -rf 삭제가 감지되었습니다.'
     ],
+    // git 규칙들은 서브커맨드 앞에 오는 전역 옵션(-C <path>, -c <k=v>, --git-dir=, --work-tree=, --no-pager)을
+    // 허용해야 우회(git -C . reset --hard 등)를 막을 수 있다.
     [
-      /\bgit\s+reset\s+--hard\b/i,
+      /\bgit\b(?:\s+(?:-[Cc]\s+\S+|--(?:git-dir|work-tree)(?:=\S+|\s+\S+)|--no-pager))*\s+reset\s+--hard\b/i,
       'git reset --hard는 작업 중인 변경사항을 되돌릴 수 있습니다.'
     ],
     [
-      /\bgit\s+clean\b[^;\n]*(?:\s-[A-Za-z]*f[A-Za-z]*|\s--force\b)/i,
+      /\bgit\b(?:\s+(?:-[Cc]\s+\S+|--(?:git-dir|work-tree)(?:=\S+|\s+\S+)|--no-pager))*\s+clean\b[^;\n]*(?:\s-[A-Za-z]*f[A-Za-z]*|\s--force\b)/i,
       'git clean -f 계열은 추적되지 않은 파일을 영구 삭제할 수 있습니다.'
     ],
     [
-      /\bgit\s+push\b[^;\n]*(?:--force(?:-with-lease)?|-f)(?:\s|$)/i,
+      /\bgit\b(?:\s+(?:-[Cc]\s+\S+|--(?:git-dir|work-tree)(?:=\S+|\s+\S+)|--no-pager))*\s+push\b[^;\n]*(?:--force(?:-with-lease)?|-f)(?:\s|$)/i,
       '강제 push는 원격 Git 이력을 덮어쓸 수 있습니다.'
     ],
     [
-      /\bgit\s+branch\s+-D\b/,
+      /\bgit\b(?:\s+(?:-[Cc]\s+\S+|--(?:git-dir|work-tree)(?:=\S+|\s+\S+)|--no-pager))*\s+branch\s+-D\b/,
       'git branch -D는 병합되지 않은 로컬 브랜치도 강제로 삭제합니다.'
     ],
     [
-      /\bgit\s+(?:checkout|restore)\b[^;\n]*(?:--\s+)?(?:\.|\*)(?:\s|$)/i,
+      /\bgit\b(?:\s+(?:-[Cc]\s+\S+|--(?:git-dir|work-tree)(?:=\S+|\s+\S+)|--no-pager))*\s+(?:checkout|restore)\b[^;\n]*(?:--\s+)?(?:\.|\*)(?:\s|$)/i,
       '전체 작업 트리 변경사항을 버리는 Git 명령이 감지되었습니다.'
     ],
     [

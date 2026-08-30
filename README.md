@@ -122,12 +122,15 @@ Claude Code가 이 GitHub 저장소에서 직접 받아갑니다 (공개 저장�
 
 ## 검증
 
-모든 hook은 exit code 단위 테스트(50건)를 통과했습니다.
+모든 hook은 exit code 단위 테스트(70건)를 통과했습니다.
 수동 확인: 아무 프로젝트에서 Claude Code로 `git push --force`를 요청하면
 "Dangerous Command Guard" 차단 메시지가 떠야 합니다.
 
 ## 변경 이력
 
+- team-guards 1.1.1 — git 전역 옵션 우회 차단: `git -C <경로> reset --hard`, `git --git-dir=... push --force` 등
+  서브커맨드 앞에 전역 옵션(-C/-c, --git-dir, --work-tree, --no-pager)이 오면 규칙을 비켜가던 문제 수정.
+  git 위험 명령 패턴 5종 전부 갱신 (실사용 피드백 반영).
 - team-toolbox 1.2.0 — improve-token-efficiency 스킬 추가: 세션 JSONL 로그를 분석해
   토큰·캐시·비용 대시보드와 $ 절감안 생성. SKILL.md에 Windows 보정(python/$env:TEMP/start) 적용.
 - team-toolbox 1.1.0 — sdd-harness 스킬 추가: "이 프로젝트에 SDD 세팅해줘" 한 마디로 스펙 문서 골격,

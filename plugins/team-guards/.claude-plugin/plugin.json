@@ -1,5 +1,5 @@
 {
   "name": "team-guards",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "안전 가드: 되돌리기 어려운 명령과 민감 파일 수정을 사전 차단합니다. 전 구성원 기본 적용."
 }
