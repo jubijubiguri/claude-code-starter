@@ -42,7 +42,7 @@ powershell -ExecutionPolicy Bypass -File .\setup.ps1
 **3. 확인** — Claude Code를 새로 실행하고 `/plugin`을 입력해서 `team-guards`,
 `team-toolbox`가 활성 상태인지 확인하세요. 처음에는 플러그인을 내려받느라 잠시 걸릴 수 있습니다.
 
-**4. 시작** — [guides/hands-on-walkthrough.md](guides/hands-on-walkthrough.md)를 열고
+**4. 시작** — [guides/onboarding-course.md](guides/onboarding-course.md)를 열고
 1시간 체험 코스를 따라 해보세요. 개념 설명은 [guides/claude-code-handbook.md](guides/claude-code-handbook.md)에 있습니다.
 
 ## 구성
@@ -69,7 +69,7 @@ plugins/
         └── sdd-harness/               SDD 스캐폴드 — 스펙 문서 골격 + /harness + execute.py를 현재 프로젝트에 심음
 guides/
 ├── claude-code-handbook.md         구성원 핸드북 (3부 8장 통합본)
-└── hands-on-walkthrough.md         따라하기 — 프롬프트만 치면 되는 1시간 체험 코스
+└── onboarding-course.md            온보딩 코스 — 설치부터 심화까지 치면서 배우는 따라하기
 ```
 
 ## 동작 원칙
